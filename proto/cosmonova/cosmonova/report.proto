@@ -1,0 +1,14 @@
+syntax = "proto3";
+package cosmonova.cosmonova;
+
+option go_package = "cosmonova/x/cosmonova/types";
+
+message Report {
+  
+  string queryId = 1; 
+  string queryData = 2; 
+  string value = 3; 
+  uint64 nonce = 4; 
+  uint64 timestamp = 5;
+  string reporter = 6; 
+}

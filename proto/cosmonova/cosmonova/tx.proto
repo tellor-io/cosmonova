@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package cosmonova.cosmonova;
+
+option go_package = "cosmonova/x/cosmonova/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc SubmitValue (MsgSubmitValue) returns (MsgSubmitValueResponse);
+}
+message MsgSubmitValue {
+  string creator   = 1;
+  string queryId   = 2;
+  string queryData = 3;
+  uint64 nonce     = 4;
+  string value     = 5;
+}
+
+message MsgSubmitValueResponse {}
+

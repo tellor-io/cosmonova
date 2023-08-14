@@ -1,0 +1,12 @@
+syntax = "proto3";
+package cosmonova.cosmonova;
+
+import "gogoproto/gogo.proto";
+import "cosmonova/cosmonova/params.proto";
+
+option go_package = "cosmonova/x/cosmonova/types";
+
+// GenesisState defines the cosmonova module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
