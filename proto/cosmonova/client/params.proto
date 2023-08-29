@@ -1,0 +1,12 @@
+syntax = "proto3";
+package cosmonova.client;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "cosmonova/x/client/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

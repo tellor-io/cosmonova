@@ -1,0 +1,15 @@
+syntax = "proto3";
+package cosmonova.cosmonova;
+
+option go_package = "cosmonova/x/cosmonova/types";
+import "gogoproto/gogo.proto"; 
+import "cosmos/base/v1beta1/coin.proto"; 
+
+message DataRequest {
+  
+  string queryData = 1; 
+  string value = 2; 
+  uint64 lastReported = 3; 
+  cosmos.base.v1beta1.Coin tipAmount = 4 [(gogoproto.nullable) = false]; 
+  string status = 5; 
+}

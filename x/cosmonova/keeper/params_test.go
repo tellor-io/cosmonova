@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetParams(t *testing.T) {
-	k, ctx := testkeeper.CosanovaKeeper(t)
+	k, ctx := testkeeper.CosmonovaKeeper(t)
 	params := types.DefaultParams()
 
 	k.SetParams(ctx, params)

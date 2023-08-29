@@ -114,6 +114,10 @@ import (
 	cosmonovamodulekeeper "cosmonova/x/cosmonova/keeper"
 	cosmonovamoduletypes "cosmonova/x/cosmonova/types"
 
+	clientmodule "cosmonova/x/client"
+	clientmodulekeeper "cosmonova/x/client/keeper"
+	clientmoduletypes "cosmonova/x/client/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "cosmonova/app/params"
@@ -175,6 +179,7 @@ var (
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
 		cosmonovamodule.AppModuleBasic{},
+		clientmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -189,6 +194,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
+		cosmonovamoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 	}
 )
 
@@ -251,6 +257,9 @@ type App struct {
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 
 	CosmonovaKeeper cosmonovamodulekeeper.Keeper
+
+	ClientKeeper clientmodulekeeper.Keeper
+
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -298,6 +307,7 @@ func New(
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		cosmonovamoduletypes.StoreKey,
+		clientmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -525,9 +535,18 @@ func New(
 		keys[cosmonovamoduletypes.StoreKey],
 		keys[cosmonovamoduletypes.MemStoreKey],
 		app.GetSubspace(cosmonovamoduletypes.ModuleName),
-		*app.StakingKeeper,
+		app.StakingKeeper,
+		app.BankKeeper,
 	)
 	cosmonovaModule := cosmonovamodule.NewAppModule(appCodec, app.CosmonovaKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper)
+
+	app.ClientKeeper = *clientmodulekeeper.NewKeeper(
+		appCodec,
+		keys[clientmoduletypes.StoreKey],
+		keys[clientmoduletypes.MemStoreKey],
+		app.GetSubspace(clientmoduletypes.ModuleName),
+	)
+	clientModule := clientmodule.NewAppModule(appCodec, app.ClientKeeper, app.AccountKeeper, app.BankKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -591,6 +610,7 @@ func New(
 		transferModule,
 		icaModule,
 		cosmonovaModule,
+		clientModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -624,6 +644,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		cosmonovamoduletypes.ModuleName,
+		clientmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -650,6 +671,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		cosmonovamoduletypes.ModuleName,
+		clientmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -681,6 +703,7 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		cosmonovamoduletypes.ModuleName,
+		clientmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.mm.SetOrderInitGenesis(genesisModuleOrder...)
@@ -906,6 +929,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(cosmonovamoduletypes.ModuleName)
+	paramsKeeper.Subspace(clientmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

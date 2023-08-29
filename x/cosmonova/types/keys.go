@@ -14,6 +14,10 @@ const (
 	MemStoreKey = "mem_cosanova"
 
 	ReportKey = "Report-value-"
+
+	RequestKey = "Request-value-"
+
+	RequestDataKey = "RequestData-value-"
 )
 
 func KeyPrefix(p string) []byte {

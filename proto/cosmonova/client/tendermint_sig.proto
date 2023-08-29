@@ -1,0 +1,10 @@
+syntax = "proto3";
+package cosmonova.client;
+import "gogoproto/gogo.proto";
+option go_package = "cosmonova/x/client/types";
+message TendermintSig {
+    bytes  r                 = 1 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    bytes  s                 = 2 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    uint32 v                 = 3;
+    bytes  encoded_timestamp = 4 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  }

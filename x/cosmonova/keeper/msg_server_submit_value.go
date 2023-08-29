@@ -15,6 +15,7 @@ import (
 func (k msgServer) SubmitValue(goCtx context.Context, msg *types.MsgSubmitValue) (*types.MsgSubmitValueResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	accAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+
 	if err != nil {
 		ctx.Logger().Error("invalid account address", "address", accAddr)
 		return nil, err
@@ -40,7 +41,7 @@ func (k msgServer) SubmitValue(goCtx context.Context, msg *types.MsgSubmitValue)
 	event := sdk.NewEvent(
 		"report submitted",
 		sdk.NewAttribute("query_id", report.QueryId),
-		sdk.NewAttribute("timestamp", string(report.Timestamp)),
+		sdk.NewAttribute("timestamp", fmt.Sprint(report.Timestamp)),
 	)
 
 	// Emit the event

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package cosmonova.cosmonova;
+
+option go_package = "cosmonova/x/cosmonova/types";
+
+message Values {
+  
+  string validator = 1; 
+  uint64 validatorPower = 2; 
+  uint64 val = 3;
+  uint64 timestamp = 4; 
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package cosmonova.client;
+option go_package = "cosmonova/x/client/types";
+
+message EvmEncodedBlockHeaderMerkle {
+
+  string version_chain_id_merkle_hash = 1;
+  uint64 height = 2;
+  uint64 time_second = 3;
+  uint32 time_nano_second = 4;
+  string last_block_id_commit_merkle_hash = 5;
+  string next_validator_consensus_merkle_hash = 6;
+  string last_results_hash = 7;
+  string evidence_proposer_merkle_hash = 8;
+ 
+}

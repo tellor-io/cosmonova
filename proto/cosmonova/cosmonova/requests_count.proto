@@ -1,0 +1,9 @@
+syntax = "proto3";
+package cosmonova.cosmonova;
+
+option go_package = "cosmonova/x/cosmonova/types";
+
+message RequestsCount {
+  
+  uint64 count = 1; 
+}

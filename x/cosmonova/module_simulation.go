@@ -4,7 +4,7 @@ import (
 	"math/rand"
 
 	"cosmonova/testutil/sample"
-	cosanovasimulation "cosmonova/x/cosmonova/simulation"
+	cosmonovasimulation "cosmonova/x/cosmonova/simulation"
 	"cosmonova/x/cosmonova/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -17,7 +17,7 @@ import (
 // avoid unused import issue
 var (
 	_ = sample.AccAddress
-	_ = cosanovasimulation.FindAccount
+	_ = cosmonovasimulation.FindAccount
 	_ = simulation.MsgEntryKind
 	_ = baseapp.Paramspace
 	_ = rand.Rand{}
@@ -27,6 +27,14 @@ const (
 	opWeightMsgSubmitValue = "op_weight_msg_submit_value"
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgSubmitValue int = 100
+
+	opWeightMsgMakeRequest = "op_weight_msg_make_request"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgMakeRequest int = 100
+
+	opWeightMsgRequestData = "op_weight_msg_request_data"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgRequestData int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const
 )
@@ -64,7 +72,29 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgSubmitValue,
-		cosanovasimulation.SimulateMsgSubmitValue(am.accountKeeper, am.bankKeeper, am.keeper),
+		cosmonovasimulation.SimulateMsgSubmitValue(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgMakeRequest int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMakeRequest, &weightMsgMakeRequest, nil,
+		func(_ *rand.Rand) {
+			weightMsgMakeRequest = defaultWeightMsgMakeRequest
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgMakeRequest,
+		cosmonovasimulation.SimulateMsgMakeRequest(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgRequestData int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgRequestData, &weightMsgRequestData, nil,
+		func(_ *rand.Rand) {
+			weightMsgRequestData = defaultWeightMsgRequestData
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgRequestData,
+		cosmonovasimulation.SimulateMsgRequestData(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
@@ -79,7 +109,23 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 			opWeightMsgSubmitValue,
 			defaultWeightMsgSubmitValue,
 			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
-				cosanovasimulation.SimulateMsgSubmitValue(am.accountKeeper, am.bankKeeper, am.keeper)
+				cosmonovasimulation.SimulateMsgSubmitValue(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgMakeRequest,
+			defaultWeightMsgMakeRequest,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				cosmonovasimulation.SimulateMsgMakeRequest(am.accountKeeper, am.bankKeeper, am.keeper)
+				return nil
+			},
+		),
+		simulation.NewWeightedProposalMsg(
+			opWeightMsgRequestData,
+			defaultWeightMsgRequestData,
+			func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) sdk.Msg {
+				cosmonovasimulation.SimulateMsgRequestData(am.accountKeeper, am.bankKeeper, am.keeper)
 				return nil
 			},
 		),

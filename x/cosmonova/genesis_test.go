@@ -18,7 +18,7 @@ func TestGenesis(t *testing.T) {
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, ctx := keepertest.CosanovaKeeper(t)
+	k, ctx := keepertest.CosmonovaKeeper(t)
 	cosmonova.InitGenesis(ctx, *k, genesisState)
 	got := cosmonova.ExportGenesis(ctx, *k)
 	require.NotNil(t, got)

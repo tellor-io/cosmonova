@@ -4,6 +4,352 @@ info:
   name: ''
   description: ''
 paths:
+  /cosmonova/client/evm_encoded_block_header:
+    get:
+      summary: Queries a list of EvmEncodedBlockHeader items.
+      operationId: CosmonovaClientEvmEncodedBlockHeader
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              blockHeader:
+                type: object
+                properties:
+                  version_chain_id_merkle_hash:
+                    type: string
+                  height:
+                    type: string
+                    format: uint64
+                  time_second:
+                    type: string
+                    format: uint64
+                  time_nano_second:
+                    type: integer
+                    format: int64
+                  last_block_id_commit_merkle_hash:
+                    type: string
+                  next_validator_consensus_merkle_hash:
+                    type: string
+                  last_results_hash:
+                    type: string
+                  evidence_proposer_merkle_hash:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /cosmonova/client/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: CosmonovaClientParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /cosmonova/cosmonova/get_all_requests:
+    get:
+      summary: Queries a list of GetAllRequests items.
+      operationId: CosmonovaCosmonovaGetAllRequests
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              allRequests:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    queryData:
+                      type: string
+                    value:
+                      type: string
+                    lastReported:
+                      type: string
+                      format: uint64
+                    tipAmount:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                    status:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /cosmonova/cosmonova/get_request_count/{queryId}:
+    get:
+      summary: Queries a list of GetRequestCount items.
+      operationId: CosmonovaCosmonovaGetRequestCount
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              count:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: queryId
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /cosmonova/cosmonova/get_request_data/{qId}:
+    get:
+      summary: Queries a list of GetRequestData items.
+      operationId: CosmonovaCosmonovaGetRequestData
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              requestData:
+                type: object
+                properties:
+                  queryData:
+                    type: string
+                  valueList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        validator:
+                          type: string
+                        validatorPower:
+                          type: string
+                          format: uint64
+                        val:
+                          type: string
+                          format: uint64
+                        timestamp:
+                          type: string
+                          format: uint64
+                  tip:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                  timeofRequest:
+                    type: string
+                    format: int64
+                  status:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: qId
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /cosmonova/cosmonova/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -46665,180 +47011,63 @@ paths:
       tags:
         - Query
 definitions:
-  cosmonova.cosmonova.MsgSubmitValueResponse:
+  cosmonova.client.EvmEncodedBlockHeaderMerkle:
     type: object
-  cosmonova.cosmonova.Params:
+    properties:
+      version_chain_id_merkle_hash:
+        type: string
+      height:
+        type: string
+        format: uint64
+      time_second:
+        type: string
+        format: uint64
+      time_nano_second:
+        type: integer
+        format: int64
+      last_block_id_commit_merkle_hash:
+        type: string
+      next_validator_consensus_merkle_hash:
+        type: string
+      last_results_hash:
+        type: string
+      evidence_proposer_merkle_hash:
+        type: string
+  cosmonova.client.Params:
     type: object
     description: Params defines the parameters for the module.
-  cosmonova.cosmonova.QueryParamsResponse:
+  cosmonova.client.QueryEvmEncodedBlockHeaderResponse:
+    type: object
+    properties:
+      blockHeader:
+        type: object
+        properties:
+          version_chain_id_merkle_hash:
+            type: string
+          height:
+            type: string
+            format: uint64
+          time_second:
+            type: string
+            format: uint64
+          time_nano_second:
+            type: integer
+            format: int64
+          last_block_id_commit_merkle_hash:
+            type: string
+          next_validator_consensus_merkle_hash:
+            type: string
+          last_results_hash:
+            type: string
+          evidence_proposer_merkle_hash:
+            type: string
+  cosmonova.client.QueryParamsResponse:
     type: object
     properties:
       params:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
-  cosmonova.cosmonova.QueryRetrieveValueAllResponse:
-    type: object
-    properties:
-      report:
-        type: array
-        items:
-          type: object
-          properties:
-            queryId:
-              type: string
-            queryData:
-              type: string
-            value:
-              type: string
-            nonce:
-              type: string
-              format: uint64
-            timestamp:
-              type: string
-              format: uint64
-            reporter:
-              type: string
-      pagination:
-        type: object
-        properties:
-          next_key:
-            type: string
-            format: byte
-            description: |-
-              next_key is the key to be passed to PageRequest.key to
-              query the next page most efficiently. It will be empty if
-              there are no more results.
-          total:
-            type: string
-            format: uint64
-            title: >-
-              total is total number of results available if
-              PageRequest.count_total
-
-              was set, its value is undefined otherwise
-        description: |-
-          PageResponse is to be embedded in gRPC response messages where the
-          corresponding request message has used PageRequest.
-
-           message SomeResponse {
-                   repeated Bar results = 1;
-                   PageResponse page = 2;
-           }
-  cosmonova.cosmonova.QueryRetrieveValueResponse:
-    type: object
-    properties:
-      report:
-        type: object
-        properties:
-          queryId:
-            type: string
-          queryData:
-            type: string
-          value:
-            type: string
-          nonce:
-            type: string
-            format: uint64
-          timestamp:
-            type: string
-            format: uint64
-          reporter:
-            type: string
-  cosmonova.cosmonova.Report:
-    type: object
-    properties:
-      queryId:
-        type: string
-      queryData:
-        type: string
-      value:
-        type: string
-      nonce:
-        type: string
-        format: uint64
-      timestamp:
-        type: string
-        format: uint64
-      reporter:
-        type: string
-  cosmos.base.query.v1beta1.PageRequest:
-    type: object
-    properties:
-      key:
-        type: string
-        format: byte
-        description: |-
-          key is a value returned in PageResponse.next_key to begin
-          querying the next page most efficiently. Only one of offset or key
-          should be set.
-      offset:
-        type: string
-        format: uint64
-        description: |-
-          offset is a numeric offset that can be used when key is unavailable.
-          It is less efficient than using key. Only one of offset or key should
-          be set.
-      limit:
-        type: string
-        format: uint64
-        description: >-
-          limit is the total number of results to be returned in the result
-          page.
-
-          If left empty it will default to a value to be set by each app.
-      count_total:
-        type: boolean
-        description: >-
-          count_total is set to true  to indicate that the result set should
-          include
-
-          a count of the total number of items available for pagination in UIs.
-
-          count_total is only respected when offset is used. It is ignored when
-          key
-
-          is set.
-      reverse:
-        type: boolean
-        description: >-
-          reverse is set to true if results are to be returned in the descending
-          order.
-
-
-          Since: cosmos-sdk 0.43
-    description: |-
-      message SomeRequest {
-               Foo some_parameter = 1;
-               PageRequest pagination = 2;
-       }
-    title: |-
-      PageRequest is to be embedded in gRPC request messages for efficient
-      pagination. Ex:
-  cosmos.base.query.v1beta1.PageResponse:
-    type: object
-    properties:
-      next_key:
-        type: string
-        format: byte
-        description: |-
-          next_key is the key to be passed to PageRequest.key to
-          query the next page most efficiently. It will be empty if
-          there are no more results.
-      total:
-        type: string
-        format: uint64
-        title: |-
-          total is total number of results available if PageRequest.count_total
-          was set, its value is undefined otherwise
-    description: |-
-      PageResponse is to be embedded in gRPC response messages where the
-      corresponding request message has used PageRequest.
-
-       message SomeResponse {
-               repeated Bar results = 1;
-               PageResponse page = 2;
-       }
   google.protobuf.Any:
     type: object
     properties:
@@ -47162,6 +47391,380 @@ definitions:
                   "@type": "type.googleapis.com/google.protobuf.Duration",
                   "value": "1.212s"
                 }
+  cosmonova.cosmonova.DataRequest:
+    type: object
+    properties:
+      queryData:
+        type: string
+      value:
+        type: string
+      lastReported:
+        type: string
+        format: uint64
+      tipAmount:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      status:
+        type: string
+  cosmonova.cosmonova.MsgMakeRequestResponse:
+    type: object
+  cosmonova.cosmonova.MsgRequestDataResponse:
+    type: object
+  cosmonova.cosmonova.MsgSubmitValueResponse:
+    type: object
+  cosmonova.cosmonova.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  cosmonova.cosmonova.QueryGetAllRequestsResponse:
+    type: object
+    properties:
+      allRequests:
+        type: array
+        items:
+          type: object
+          properties:
+            queryData:
+              type: string
+            value:
+              type: string
+            lastReported:
+              type: string
+              format: uint64
+            tipAmount:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+            status:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  cosmonova.cosmonova.QueryGetRequestCountResponse:
+    type: object
+    properties:
+      count:
+        type: string
+        format: uint64
+  cosmonova.cosmonova.QueryGetRequestDataResponse:
+    type: object
+    properties:
+      requestData:
+        type: object
+        properties:
+          queryData:
+            type: string
+          valueList:
+            type: array
+            items:
+              type: object
+              properties:
+                validator:
+                  type: string
+                validatorPower:
+                  type: string
+                  format: uint64
+                val:
+                  type: string
+                  format: uint64
+                timestamp:
+                  type: string
+                  format: uint64
+          tip:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+          timeofRequest:
+            type: string
+            format: int64
+          status:
+            type: string
+  cosmonova.cosmonova.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  cosmonova.cosmonova.QueryRetrieveValueAllResponse:
+    type: object
+    properties:
+      report:
+        type: array
+        items:
+          type: object
+          properties:
+            queryId:
+              type: string
+            queryData:
+              type: string
+            value:
+              type: string
+            nonce:
+              type: string
+              format: uint64
+            timestamp:
+              type: string
+              format: uint64
+            reporter:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  cosmonova.cosmonova.QueryRetrieveValueResponse:
+    type: object
+    properties:
+      report:
+        type: object
+        properties:
+          queryId:
+            type: string
+          queryData:
+            type: string
+          value:
+            type: string
+          nonce:
+            type: string
+            format: uint64
+          timestamp:
+            type: string
+            format: uint64
+          reporter:
+            type: string
+  cosmonova.cosmonova.Report:
+    type: object
+    properties:
+      queryId:
+        type: string
+      queryData:
+        type: string
+      value:
+        type: string
+      nonce:
+        type: string
+        format: uint64
+      timestamp:
+        type: string
+        format: uint64
+      reporter:
+        type: string
+  cosmonova.cosmonova.Requests:
+    type: object
+    properties:
+      queryData:
+        type: string
+      valueList:
+        type: array
+        items:
+          type: object
+          properties:
+            validator:
+              type: string
+            validatorPower:
+              type: string
+              format: uint64
+            val:
+              type: string
+              format: uint64
+            timestamp:
+              type: string
+              format: uint64
+      tip:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      timeofRequest:
+        type: string
+        format: int64
+      status:
+        type: string
+  cosmonova.cosmonova.Values:
+    type: object
+    properties:
+      validator:
+        type: string
+      validatorPower:
+        type: string
+        format: uint64
+      val:
+        type: string
+        format: uint64
+      timestamp:
+        type: string
+        format: uint64
+  cosmos.base.query.v1beta1.PageRequest:
+    type: object
+    properties:
+      key:
+        type: string
+        format: byte
+        description: |-
+          key is a value returned in PageResponse.next_key to begin
+          querying the next page most efficiently. Only one of offset or key
+          should be set.
+      offset:
+        type: string
+        format: uint64
+        description: |-
+          offset is a numeric offset that can be used when key is unavailable.
+          It is less efficient than using key. Only one of offset or key should
+          be set.
+      limit:
+        type: string
+        format: uint64
+        description: >-
+          limit is the total number of results to be returned in the result
+          page.
+
+          If left empty it will default to a value to be set by each app.
+      count_total:
+        type: boolean
+        description: >-
+          count_total is set to true  to indicate that the result set should
+          include
+
+          a count of the total number of items available for pagination in UIs.
+
+          count_total is only respected when offset is used. It is ignored when
+          key
+
+          is set.
+      reverse:
+        type: boolean
+        description: >-
+          reverse is set to true if results are to be returned in the descending
+          order.
+
+
+          Since: cosmos-sdk 0.43
+    description: |-
+      message SomeRequest {
+               Foo some_parameter = 1;
+               PageRequest pagination = 2;
+       }
+    title: |-
+      PageRequest is to be embedded in gRPC request messages for efficient
+      pagination. Ex:
+  cosmos.base.query.v1beta1.PageResponse:
+    type: object
+    properties:
+      next_key:
+        type: string
+        format: byte
+        description: |-
+          next_key is the key to be passed to PageRequest.key to
+          query the next page most efficiently. It will be empty if
+          there are no more results.
+      total:
+        type: string
+        format: uint64
+        title: |-
+          total is total number of results available if PageRequest.count_total
+          was set, its value is undefined otherwise
+    description: |-
+      PageResponse is to be embedded in gRPC response messages where the
+      corresponding request message has used PageRequest.
+
+       message SomeResponse {
+               repeated Bar results = 1;
+               PageResponse page = 2;
+       }
+  cosmos.base.v1beta1.Coin:
+    type: object
+    properties:
+      denom:
+        type: string
+      amount:
+        type: string
+    description: |-
+      Coin defines a token with a denomination and an amount.
+
+      NOTE: The amount field is an Int which implements the custom method
+      signatures required by gogoproto.
   cosmos.auth.v1beta1.AddressBytesToStringResponse:
     type: object
     properties:
@@ -50045,18 +50648,6 @@ definitions:
     description: |-
       SendEnabled maps coin denom to a send_enabled status (whether a denom is
       sendable).
-  cosmos.base.v1beta1.Coin:
-    type: object
-    properties:
-      denom:
-        type: string
-      amount:
-        type: string
-    description: |-
-      Coin defines a token with a denomination and an amount.
-
-      NOTE: The amount field is an Int which implements the custom method
-      signatures required by gogoproto.
   cosmos.base.node.v1beta1.ConfigResponse:
     type: object
     properties:

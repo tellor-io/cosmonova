@@ -9,7 +9,6 @@ import (
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 
 	"cosmonova/x/cosmonova/types"
 )
@@ -20,7 +19,8 @@ type (
 		storeKey      storetypes.StoreKey
 		memKey        storetypes.StoreKey
 		paramstore    paramtypes.Subspace
-		stakingKeeper stakingkeeper.Keeper
+		stakingKeeper types.StakingKeeper
+		bank          types.BankKeeper
 	}
 )
 
@@ -29,7 +29,8 @@ func NewKeeper(
 	storeKey storetypes.StoreKey,
 	memKey storetypes.StoreKey,
 	ps paramtypes.Subspace,
-	sk stakingkeeper.Keeper,
+	sk types.StakingKeeper,
+	bank types.BankKeeper,
 
 ) *Keeper {
 	// set KeyTable if it has not already been set
@@ -43,6 +44,7 @@ func NewKeeper(
 		memKey:        memKey,
 		paramstore:    ps,
 		stakingKeeper: sk,
+		bank:          bank,
 	}
 }
 

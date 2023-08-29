@@ -15,11 +15,16 @@ type AccountKeeper interface {
 // BankKeeper defines the expected interface needed to retrieve account balances.
 type BankKeeper interface {
 	SpendableCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
+	SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 	// Methods imported from bank should be defined here
 }
 
-// BankKeeper defines the expected interface needed to retrieve account balances.
 type StakingKeeper interface {
 	ValidatorByConsAddr(sdk.Context, sdk.ConsAddress) stakingtypes.ValidatorI
+	GetAllValidators(ctx sdk.Context) []stakingtypes.Validator
+	TotalBondedTokens(ctx sdk.Context) sdk.Int
+	Validator(ctx sdk.Context, addr sdk.ValAddress) stakingtypes.ValidatorI
 	// Methods imported from bank should be defined here
 }
