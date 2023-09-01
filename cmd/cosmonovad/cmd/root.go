@@ -41,6 +41,7 @@ import (
 
 	"cosmonova/app"
 	appparams "cosmonova/app/params"
+	"cosmonova/client/grpc"
 )
 
 // NewRootCmd creates a new root command for a Cosmos SDK application
@@ -165,6 +166,9 @@ func queryCommand() *cobra.Command {
 		rpc.BlockCommand(),
 		authcmd.QueryTxsByEventsCmd(),
 		authcmd.QueryTxCmd(),
+		grpc.EvmEncodedBlockHeaderMerkleParts(),
+		grpc.TendermintSignatures(),
+		grpc.MultiStoreData(),
 	)
 
 	app.ModuleBasics.AddQueryCommands(cmd)

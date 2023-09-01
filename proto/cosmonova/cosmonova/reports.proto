@@ -1,0 +1,11 @@
+syntax = "proto3";
+package cosmonova.cosmonova;
+
+import "cosmonova/cosmonova/values.proto";
+
+option go_package = "cosmonova/x/cosmonova/types";
+
+message Reports {
+  string queryData = 1; 
+  repeated Values valueList = 2; 
+}

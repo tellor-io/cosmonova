@@ -9,12 +9,20 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSubmitValue{}, "cosmonova/SubmitValue", nil)
+	cdc.RegisterConcrete(&MsgMakeRequest{}, "cosmonova/MakeRequest", nil)
+	cdc.RegisterConcrete(&MsgRequestData{}, "cosmonova/RequestData", nil)
 	// this line is used by starport scaffolding # 2
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgSubmitValue{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgMakeRequest{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgRequestData{},
 	)
 	// this line is used by starport scaffolding # 3
 

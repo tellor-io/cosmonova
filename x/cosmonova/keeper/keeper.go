@@ -9,7 +9,6 @@ import (
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 
 	"cosmonova/x/cosmonova/types"
 )
@@ -20,7 +19,8 @@ type (
 		storeKey      storetypes.StoreKey
 		memKey        storetypes.StoreKey
 		paramstore    paramtypes.Subspace
-		stakingKeeper stakingkeeper.Keeper
+		stakingKeeper types.StakingKeeper
+		bank          types.BankKeeper
 	}
 )
 
@@ -29,7 +29,8 @@ func NewKeeper(
 	storeKey storetypes.StoreKey,
 	memKey storetypes.StoreKey,
 	ps paramtypes.Subspace,
-	sk stakingkeeper.Keeper,
+	sk types.StakingKeeper,
+	bank types.BankKeeper,
 
 ) *Keeper {
 	// set KeyTable if it has not already been set
@@ -43,6 +44,7 @@ func NewKeeper(
 		memKey:        memKey,
 		paramstore:    ps,
 		stakingKeeper: sk,
+		bank:          bank,
 	}
 }
 
@@ -54,14 +56,14 @@ func (k Keeper) AddReport(ctx sdk.Context, report types.Report) {
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReportKey))
 	addedReport := k.cdc.MustMarshal(&report)
-	store.Set(getKeyBytes(report.QueryId, report.Timestamp), addedReport)
+	store.Set(GetKeyBytes(report.QueryId, report.Timestamp), addedReport)
 }
 
 func makeKey(queryId string, timestamp uint64) string {
 	return fmt.Sprintf("%s-%d", queryId, timestamp)
 }
 
-func getKeyBytes(queryId string, timestamp uint64) []byte {
+func GetKeyBytes(queryId string, timestamp uint64) []byte {
 	key := makeKey(queryId, timestamp)
 	return []byte(key)
 }
@@ -72,7 +74,7 @@ func (k Keeper) GetValidator(ctx sdk.Context, val sdk.ValAddress) bool {
 }
 func (k Keeper) GetReport(ctx sdk.Context, queryId string, timestamp uint64) (report types.Report, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReportKey))
-	b := store.Get(getKeyBytes(queryId, timestamp))
+	b := store.Get(GetKeyBytes(queryId, timestamp))
 	if b == nil {
 		return report, false
 	}

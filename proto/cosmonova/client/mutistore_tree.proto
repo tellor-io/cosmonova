@@ -1,0 +1,37 @@
+syntax = "proto3";
+package cosmonova.client;
+
+import "gogoproto/gogo.proto";
+option go_package = "cosmonova/x/client/types";
+/*
+                                             ___________________________[AppHash]______________
+                                            /                                                  \
+                         _________________[I19]_________________                           ____[I20*]____
+                        /                                        \	                      /              \
+             _______[I15]______                          _______[I16*]______          [GHIJ]           [KLMN]
+            /                  \                        /                   \
+      __[I8*]__             __[I9]__              __[I10]__             __[I11]__
+     /         \          /         \            /         \           /         \
+    [I0]       [I1]     [I2]        [I3*]       [I4]      [I5]        [I6]       [I7]
+    /   \      /   \     /   \      /    \      /    \    /    \     /    \     /    \
+[0]   [1]  [2]   [3] [4*]  [5*]  [6]   [7]  [8]    [9] [A]    [B] [C]     [D] [E]     [F]
+Left[4], Right[I3], Left[I8], Right[I16], Right[I20]
+[0] - acc (auth) [1] - authz           [2] - bank     [3] - capability [4] - consensus [5] - cosmonova
+[6] - crisis     [7] - distr           [8] - evidence [9] - feegrant   [A] - gov       [B] - group
+[C] - ibc        [D] - icacontroller   [E] - icahost  [F] - mint       [G] - params    [H] - slashing
+[I] - staking    [J] - transfer        [K] - upgrade  [L] - vesting
+*/
+message MutiStoreTreeFields {
+    bytes cosmonova_iavl_state_hash = 1 [
+    (gogoproto.casttype)   = "github.com/cometbft/cometbft/libs/bytes.HexBytes"
+  ];
+  bytes consensus_store_merkle_hash = 2 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  bytes crisis_to_distr_stores_merkle_hash = 3
+      [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  bytes acc_to_capability_stores_merkle_hash = 4
+      [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  bytes evidence_to_icahost_stores_merkle_hash = 5
+      [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  bytes mint_to_vesting_stores_merkle_hash = 6
+      [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+}

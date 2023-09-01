@@ -1,0 +1,9 @@
+syntax = "proto3";
+package cosmonova.client;
+import "gogoproto/gogo.proto";
+
+option go_package = "cosmonova/x/client/types";
+message CommonEncodedVotePart {
+    bytes signed_data_prefix = 1 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    bytes signed_data_suffix = 2 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  }

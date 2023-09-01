@@ -1,0 +1,13 @@
+syntax = "proto3";
+package cosmonova.client;
+import "gogoproto/gogo.proto";
+
+option go_package = "cosmonova/x/client/types";
+// IAVLMerklePath represents a Merkle step to a leaf data node in an iAVL tree.
+message IAVLMerklePath {
+    bool   is_data_on_right = 1;
+    uint32 subtree_height   = 2;
+    uint64 subtree_size     = 3;
+    uint64 subtree_version  = 4;
+    bytes  sibling_hash     = 5 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+  }

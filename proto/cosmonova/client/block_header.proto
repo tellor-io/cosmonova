@@ -1,0 +1,17 @@
+syntax = "proto3";
+package cosmonova.client;
+import "gogoproto/gogo.proto";
+
+option go_package = "cosmonova/x/client/types";
+
+message BlockHeaderMerkleFields {
+    bytes version_chain_id_merkle_hash = 1 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    uint64 height = 2;
+    uint64 time_second = 3;
+    uint32 time_nano_second = 4;
+    bytes last_block_id_commit_merkle_hash = 5 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    bytes next_validator_consensus_merkle_hash = 6 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    bytes last_results_hash = 7 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+    bytes evidence_proposer_merkle_hash = 8 [(gogoproto.casttype) = "github.com/cometbft/cometbft/libs/bytes.HexBytes"];
+}
+

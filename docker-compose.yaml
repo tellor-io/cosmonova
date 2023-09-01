@@ -1,0 +1,46 @@
+version: '3'
+volumes:
+  genesis:
+  keyring:
+
+
+services:
+  validator-1:
+    image: cosmos-ignite
+    ports:
+      - "26660:26656"
+      - "26661:26657"
+    volumes:
+      - genesis:/root/genesis/
+      - keyring:/root/keyring/
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cp /root/.cosmonova/config/genesis.json /root/genesis/
+        cp -r /root/.cosmonova/keyring-test  /root/keyring/
+        cosmonovad start
+
+  validator-2:
+    image: cosmos-ignite
+    depends_on:
+      - validator-1
+    ports:
+      - "26662:26656"
+      - "26663:26657"
+    volumes:
+      - genesis:/root/genesis/
+      - keyring:/root/keyring/
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        rm -rf /root/.cosmonova
+        cosmonovad init validator
+        cp /root/genesis/genesis.json /root/.cosmonova/config/genesis.json
+        cp -r /root/keyring/keyring-test /root/.cosmonova/
+        cosmonovad keys delete alice --keyring-backend test -y
+        sed -i 's/^persistent_peers = .*/persistent_peers = "a18c69f0d39323086080b8fc866e832a61c5969d@validator-1:26656"/' /root/.cosmonova/config/config.toml
+        cosmonovad start & sleep 15
+        cosmonovad tx staking create-validator --amount 50000000stake --pubkey $$(cosmonovad tendermint show-validator) --from bob --commission-rate 0.10 --commission-max-rate 0.20 --commission-max-change-rate 0.01 --min-self-delegation 1  --keyring-backend test -y
+        wait

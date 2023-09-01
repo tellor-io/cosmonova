@@ -7,6 +7,8 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmonova/cosmonova/params.proto";
 import "cosmonova/cosmonova/report.proto";
+import "cosmonova/cosmonova/data_request.proto";
+import "cosmonova/cosmonova/requests.proto";
 
 option go_package = "cosmonova/x/cosmonova/types";
 
@@ -28,6 +30,24 @@ service Query {
   // Queries a list of RetrieveValueAll items.
   rpc RetrieveValueAll (QueryRetrieveValueAllRequest) returns (QueryRetrieveValueAllResponse) {
     option (google.api.http).get = "/cosmonova/cosmonova/retrieve_value_all";
+  
+  }
+  
+  // Queries a list of GetAllRequests items.
+  rpc GetAllRequests (QueryGetAllRequestsRequest) returns (QueryGetAllRequestsResponse) {
+    option (google.api.http).get = "/cosmonova/cosmonova/get_all_requests";
+  
+  }
+  
+  // Queries a list of GetRequestCount items.
+  rpc GetRequestCount (QueryGetRequestCountRequest) returns (QueryGetRequestCountResponse) {
+    option (google.api.http).get = "/cosmonova/cosmonova/get_request_count/{queryId}";
+  
+  }
+  
+  // Queries a list of GetRequestData items.
+  rpc GetRequestData (QueryGetRequestDataRequest) returns (QueryGetRequestDataResponse) {
+    option (google.api.http).get = "/cosmonova/cosmonova/get_request_data/{qId}";
   
   }
 }
@@ -56,6 +76,31 @@ message QueryRetrieveValueAllRequest {
 
 message QueryRetrieveValueAllResponse {
   repeated Report                                 report     = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetAllRequestsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetAllRequestsResponse {
+  repeated DataRequest                            allRequests = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination  = 2;
+}
+
+message QueryGetRequestCountRequest {
+  string queryId = 1;
+}
+
+message QueryGetRequestCountResponse {
+  uint64 count = 1;
+}
+
+message QueryGetRequestDataRequest {
+  string qId = 1;
+}
+
+message QueryGetRequestDataResponse {
+  Requests requestData = 1;
 }
 

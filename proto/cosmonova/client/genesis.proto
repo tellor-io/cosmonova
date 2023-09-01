@@ -1,0 +1,12 @@
+syntax = "proto3";
+package cosmonova.client;
+
+import "gogoproto/gogo.proto";
+import "cosmonova/client/params.proto";
+
+option go_package = "cosmonova/x/client/types";
+
+// GenesisState defines the client module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
