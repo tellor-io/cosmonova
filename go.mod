@@ -6,9 +6,11 @@ require (
 	cosmossdk.io/api v0.3.1
 	github.com/cometbft/cometbft v0.37.1
 	github.com/cometbft/cometbft-db v0.7.0
+	github.com/confio/ics23/go v0.9.0
 	github.com/cosmos/cosmos-sdk v0.47.3
 	github.com/cosmos/gogoproto v1.4.10
 	github.com/cosmos/ibc-go/v7 v7.1.0
+	github.com/ethereum/go-ethereum v1.10.22
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.0
@@ -53,7 +55,6 @@ require (
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/cockroachdb/apd/v2 v2.0.2 // indirect
 	github.com/coinbase/rosetta-sdk-go/types v1.0.0 // indirect
-	github.com/confio/ics23/go v0.9.0 // indirect
 	github.com/cosmos/btcutil v1.0.5 // indirect
 	github.com/cosmos/cosmos-proto v1.0.0-beta.2 // indirect
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
